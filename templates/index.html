@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<title>InsightTube - YouTube Comment Summarizer</title>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <div>
+            <img src="static/logo.png" alt="logo" width="150px">
+        </div>
+    </header>
+    <div class="description">
+        <p>Welcome to InsightTube - your personal tool for summarizing YouTube comment sections.
+        Just paste a YouTube video link below to see what people are really saying!
+        </p>
+    </div>
+    <div class="form-container">
+        <form action="/" method="POST">
+            <label for="content"><strong>Enter Youtube video URL:</strong></label><br>
+            <input type="text" name="content" id="content" placeholder="https://www.youtube.com/watch?v=..." value="{{
+                request.form.content }}">
+            <input type="submit" value="Summarize Comments">
+        </form>
+    </div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <p>Summarizing comments, please wait...</p>
+    </div>
+
+    
+    <div id="summary-section">
+        <h2>Summary</h2>
+        <div id="summary-result">
+            <button id="copy-button">📋 Copy Summary</button>
+            {% if summary %}
+            <p>{{ summary['introduction'] }}</p>
+                {% for summary in summary['summaries'] %}
+                    <h3>{{ summary['title'] }}</h3>
+                    <p>{{ summary['paragraph'] }}</p>
+                {% endfor %}
+            {% else %}
+            <p class="placeholder">Your summarized comments will appear here.</p>
+            {% endif %}
+        </div>
+        
+    </div>
+    
+    <footer>
+        &copy; 2025 InsightTube. Built to make sense of online conversations.
+    </footer>
+    <script>
+        const form = document.querySelector("form");
+        const loader = document.getElementById("loading-overlay");
+    
+        form.addEventListener("submit", () => {
+            loader.style.display = "flex";
+        });
+        document.getElementById('copy-button').addEventListener('click', function () {
+            const summaryText = document.getElementById('summary-result').innerText;
+    
+            if (!summaryText.trim()) {
+                alert("There's no summary to copy yet.");
+                return;
+            }
+    
+            navigator.clipboard.writeText(summaryText)
+                .then(() => {
+                    alert("Summary copied to clipboard!");
+                })
+                .catch(err => {
+                    console.error("Copy failed: ", err);
+                    alert("Failed to copy the summary.");
+                });
+        });
+    </script>
+{% endblock %}
