@@ -36,8 +36,8 @@ export GEMINI_API_KEY='your-gemini-api-key-here'
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/abed5/youtube-comments-summarizer.git
-   cd youtube-comments-summarizer
+   git clone https://github.com/abed5/youtube-comment-summary-app.git
+   cd youtube-comment-summary-app
    ```
 
 2. **Run the application:**
